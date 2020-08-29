@@ -98,3 +98,43 @@ puts B.procanized_instance_methods.to_s
 
 B.new.pub_b_proc
 puts B.procanized_instance_methods.to_s
+
+# CHAINING EXAMPLE
+
+module SomeMethods
+  def increment(arr)
+    arr.map { |i| i + 1 }
+  end
+
+  def stringify(arr)
+    arr.map { |i| i.to_s }
+  end
+
+  def capitalize(arr)
+    arr.map { |i| i.capitalize }
+  end
+end
+
+
+class SuperService
+  extend Procanizer
+  include SomeMethods
+
+  add_proc_for :increment, :stringify, :capitalize
+
+  def initialize
+    @final = []
+  end
+
+  def call
+    [[1, 2], [3, 4], [5, 6]].each(
+      &increment_proc >> stringify_proc >> capitalize_proc >> commit_proc
+    )
+
+    puts @final.join(":")
+  end
+
+  with_proc def commit(arr)
+    @final += arr.map { |i| "#{i} commited!" }
+  end
+end
