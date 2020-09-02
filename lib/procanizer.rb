@@ -1,14 +1,6 @@
-require "procanizer/version"
+# frozen_string_literal: true
 
 module Procanizer
-  def self.extended(base)
-    base.class_variable_set(:@@procanized_instance_methods, {})
-  end
-
-  def procanized_instance_methods
-    class_variable_get(:@@procanized_instance_methods)
-  end
-
   def add_proc_for(*meths)
     meths.each do |meth|
       define_proc_for_instance_method(meth)
@@ -18,7 +10,8 @@ module Procanizer
 
   def define_proc_for_instance_method(meth)
     define_method proc_name(meth) do
-      (self.class.procanized_instance_methods[meth] ||= method(meth)).to_proc
+      @procanized_instance_methods       ||= {}
+      @procanized_instance_methods[meth] ||= method(meth).to_proc
     end
   end
 
@@ -28,8 +21,14 @@ module Procanizer
   end
 
   def proc_name(meth)
-    "#{meth}_proc".to_sym
+    meth = meth.to_s
+
+    with_bang?(meth) ? "#{meth.chop}_proc!".to_sym : "#{meth}_proc".to_sym
   end
 
-  alias_method :with_proc, :add_proc_for
+  def with_bang?(meth)
+    meth.last == "!"
+  end
+
+  alias with_proc add_proc_for
 end
