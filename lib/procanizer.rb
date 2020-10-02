@@ -23,11 +23,18 @@ module Procanizer
   def proc_name(meth)
     meth = meth.to_s
 
-    with_bang?(meth) ? "#{meth.chop}_proc!".to_sym : "#{meth}_proc".to_sym
+    return "#{meth.chop}_proc!".to_sym if with_bang?(meth)
+    return "#{meth.chop}_proc?".to_sym if bool?(meth)
+
+    "#{meth}_proc".to_sym
   end
 
   def with_bang?(meth)
     meth.last == "!"
+  end
+
+  def bool?(meth)
+    meth.last == "?"
   end
 
   alias with_proc add_proc_for

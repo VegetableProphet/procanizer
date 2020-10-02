@@ -61,6 +61,20 @@ class SuperService
   end
 end
 ```
+
+"!"-methods converted to method_proc!
+"?"-methods converted to method_proc?
+
+```ruby
+with_proc def mutate!
+end
+
+with_proc def valid?
+end
+
+# mutate! -> mutate_proc!
+# valid?  -> valid_proc?
+```
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/VegetableProphet/procanizer.
