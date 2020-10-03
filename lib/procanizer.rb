@@ -8,6 +8,7 @@ module Procanizer
     end
   end
 
+  # uses inst variable to prevent memory bloat in some iterations
   def define_proc_for_instance_method(meth)
     define_method proc_name(meth) do
       @procanized_instance_methods       ||= {}
@@ -30,11 +31,11 @@ module Procanizer
   end
 
   def with_bang?(meth)
-    meth.last == "!"
+    meth[-1] == "!"
   end
 
   def bool?(meth)
-    meth.last == "?"
+    meth[-1] == "?"
   end
 
   alias with_proc add_proc_for

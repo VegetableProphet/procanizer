@@ -39,7 +39,7 @@ end
 
 
 class SuperService
-  extend Procanizer
+  extend  Procanizer
   include SomeMethods
 
   add_proc_for :increment, :stringify, :capitalize
